@@ -50,7 +50,7 @@ You can find here a config file example
 	"commands": [
 	    {
 		"command": "ls",
-		"params": ["ltrh"]
+		"params": ["-ltrh"]
 	    }
 	],
 	"dir": "/etc"
@@ -61,7 +61,7 @@ You can find here a config file example
 If you store the previous content in /tmp/myconfig.json, you can run it with the following command
 
 ```
-taskaut /tmp/myconfig.json
+taskaut -actions-file /tmp/myconfig.json
 ```
 
 And it will run ls and mkdir in /tmp (serialized), and at the same time (paralel) will execute ls in /etc
