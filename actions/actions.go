@@ -8,16 +8,25 @@ import (
 	"os/exec"
 )
 
+/*
+Command : struct to hold a single command plus all parameters
+*/
 type Command struct {
 	Command string   `json:"command"`
-	Params  []string `json"params"`
+	Params  []string `json:"params"`
 }
 
+/*
+Action : struct to bundle commands around a directory
+*/
 type Action struct {
 	Commands []Command `json:"commands"`
 	Dir      string    `json:"dir"`
 }
 
+/*
+RunAction : method on action that will run all chained command included in Action, sequentially
+*/
 func (action Action) RunAction(finished chan bool) {
 	defer func() { finished <- true }()
 	for _, command := range action.Commands {
@@ -38,7 +47,7 @@ func (action Action) RunAction(finished chan bool) {
 }
 
 /*
-Description: load actions from file and return them
+LoadActions : function that will load all actions and commands from a configuration file
 */
 func LoadActions(actionsFile string) []Action {
 	actions := make([]Action, 0, 1)
