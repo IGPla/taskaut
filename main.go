@@ -3,18 +3,17 @@ package main
 import (
 	"github.com/IGPla/taskaut/actions"
 	"github.com/IGPla/taskaut/utils"
+	"sync"
 )
 
 func main() {
 	actionsFile := utils.ParseFlags()
 	allActions := actions.LoadActions(actionsFile)
 
-	finished := make(chan bool, len(allActions))
+	var wg sync.WaitGroup
 	for _, action := range allActions {
-		go action.RunAction(finished)
+		wg.Add(1)
+		go action.RunAction(&wg)
 	}
-	for range allActions {
-		<-finished
-	}
-
+	wg.Wait()
 }
