@@ -38,7 +38,7 @@ func (command Command) runCommand(dir string) error {
 	cmd.Dir = dir
 	logs, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Printf("Error arised while running command %v, with params %v in directory %v: %v\n%v",
+		log.Printf("Error arose while running command %v, with params %v in directory %v: %v\n%v",
 			aurora.Blue(command.Command), aurora.Blue(command.Params),
 			aurora.Blue(dir), aurora.Red(err), aurora.Red(string(logs)))
 		return err
