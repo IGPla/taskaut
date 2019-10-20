@@ -6,7 +6,7 @@ This tool aims to be a quick way to automate common tasks on your computer. Even
 
 The following is the valid format
 
-```json
+```
 [
 	{
 		"commands": [
@@ -29,7 +29,7 @@ The following is the valid format
 ]
 ```
 
-```yaml
+```
 ---
 - commands:
   - command: <here your command>
