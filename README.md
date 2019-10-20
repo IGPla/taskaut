@@ -103,7 +103,7 @@ You can find here a config file example
 
 If you store the previous content in /tmp/myconfig.json, you can run it with the following command
 
-```
+```bash
 taskaut -actions-file /tmp/myconfig.json
 ```
 
