@@ -6,19 +6,21 @@ This tool aims to be a quick way to automate common tasks on your computer. Even
 
 The following is the valid format
 
-```
+```json
 [
 	{
 		"commands": [
 			{
 				"command": <here your command>,
-				"params": [<param1>, <paramn>]
+				"params": [<param 1>, <param n>],
+				"retries": <number of retries for the given command on fail>
 			},
 			{
 				...
 			}
 		],
-		"dir": <directory where you want to run your command list
+		"dir": <directory where you want to run your command list>
+		"abort_on_fail": <true if you want to abort the rest of commands if one fail; false otherwise>
 	},
 	{
 		...
@@ -27,35 +29,76 @@ The following is the valid format
 ]
 ```
 
+```yaml
+---
+- commands:
+  - command: <here your command>
+    params:
+    - <param 1>
+	- <param n>
+    retries: <number of retries for the given command on fail>
+  dir: <directory where you want to run your command list>
+  abort_on_fail: <true if you want to abort the rest of commands if one fail; false otherwise>
+  ...
+...
+```
+
 ## Example
 
 You can find here a config file example
 
-```
+```json
 [
     {
 	"commands": [
 	    {
 		"command": "ls",
-		"params": ["-ltrh"]
+		"params": ["-ltrh"],
+		"retries": 1
 	    },
 	    {
 		"command": "mkdir",
-		"params": ["test"]
+		"params": ["test"],
+		"retries": 0
 	    }
 	],
-	"dir": "/tmp"
+	"dir": "/tmp",
+	"abort_on_fail": true
     },
     {
 	"commands": [
 	    {
 		"command": "ls",
-		"params": ["-ltrh"]
+		"params": ["-ltrh"],
+		"retries": 5
 	    }
 	],
-	"dir": "/etc"
+	"dir": "/etc",
+	"abort_on_fail": false
     }
 ]
+```
+
+```yaml
+---
+- commands:
+  - command: ls
+    params:
+    - "-ltrh"
+    retries: 1
+  - command: mkdir
+    params:
+    - test
+    retries: 0
+  dir: "/tmp"
+  abort_on_fail: true
+- commands:
+  - command: ls
+    params:
+    - "-ltrh"
+    retries: 5
+  dir: "/etc"
+  abort_on_fail: false
 ```
 
 If you store the previous content in /tmp/myconfig.json, you can run it with the following command

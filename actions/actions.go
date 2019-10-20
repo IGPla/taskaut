@@ -1,9 +1,7 @@
 package actions
 
 import (
-	"encoding/json"
 	"github.com/logrusorgru/aurora"
-	"io/ioutil"
 	"log"
 	"os/exec"
 	"sync"
@@ -73,20 +71,4 @@ func (action Action) RunAction(wg *sync.WaitGroup) {
 			break
 		}
 	}
-}
-
-/*
-LoadActions : function that will load all actions and commands from a configuration file
-*/
-func LoadActions(actionsFile string) []Action {
-	actions := make([]Action, 0, 1)
-	rawActions, err := ioutil.ReadFile(actionsFile)
-	if err != nil {
-		log.Fatalf("Could not read %v file: %v", actionsFile, aurora.Red(err))
-	}
-	err = json.Unmarshal(rawActions, &actions)
-	if err != nil {
-		log.Fatalf("Could not parse %v file: %v", actionsFile, aurora.Red(err))
-	}
-	return actions
 }
