@@ -52,13 +52,11 @@ You can find here a config file example
     {
 	"commands": [
 	    {
-		"command": "ls",
-		"params": ["-ltrh"],
+		"command": "ls -ltrh",
 		"retries": 1
 	    },
 	    {
-		"command": "mkdir",
-		"params": ["test"],
+		"command": "mkdir test",
 		"retries": 0
 	    }
 	],
@@ -68,8 +66,7 @@ You can find here a config file example
     {
 	"commands": [
 	    {
-		"command": "ls",
-		"params": ["-ltrh"],
+		"command": "ls -ltrh",
 		"retries": 5
 	    }
 	],
@@ -79,28 +76,6 @@ You can find here a config file example
 ]
 ```
 
-```yaml
----
-- commands:
-  - command: ls
-    params:
-    - "-ltrh"
-    retries: 1
-  - command: mkdir
-    params:
-    - test
-    retries: 0
-  dir: "/tmp"
-  abort_on_fail: true
-- commands:
-  - command: ls
-    params:
-    - "-ltrh"
-    retries: 5
-  dir: "/etc"
-  abort_on_fail: false
-```
-
 If you store the previous content in /tmp/myconfig.json, you can run it with the following command
 
 ```bash
@@ -108,3 +83,22 @@ taskaut -actions-file /tmp/myconfig.json
 ```
 
 And it will run ls and mkdir in /tmp (serialized), and at the same time (paralel) will execute ls in /etc
+
+Here you have the same config file in yaml
+
+```yaml
+---
+- commands:
+  - command: ls -ltrh
+    retries: 1
+  - command: mkdir test
+    retries: 0
+  dir: "/tmp"
+  abort_on_fail: true
+- commands:
+  - command: ls -ltrh
+    retries: 5
+  dir: "/etc"
+  abort_on_fail: false
+```
+

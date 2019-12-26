@@ -4,17 +4,9 @@ import (
 	"github.com/logrusorgru/aurora"
 	"log"
 	"os/exec"
+	"strings"
 	"sync"
 )
-
-/*
-Command : struct to hold a single command plus all parameters
-*/
-type Command struct {
-	Command string   `json:"command"`
-	Params  []string `json:"params"`
-	Retries int      `json:"retries"`
-}
 
 /*
 Action : struct to bundle commands around a directory
@@ -26,23 +18,41 @@ type Action struct {
 }
 
 /*
+Command : struct to hold a single command plus all parameters
+*/
+type Command struct {
+	Command string `json:"command"`
+	Retries int    `json:"retries"`
+}
+
+func (command *Command) Params() []string {
+	return strings.Split(command.Command, " ")[1:]
+}
+
+func (command *Command) Binary() string {
+	return strings.Split(command.Command, " ")[0]
+}
+
+/*
 runCommand : method on command that will run that command
 */
 func (command Command) runCommand(dir string) error {
+	binary := command.Binary()
+	params := command.Params()
 	log.Printf("Executing command %v, with params %v in directory %v",
-		aurora.Blue(command.Command), aurora.Blue(command.Params),
+		aurora.Blue(binary), aurora.Blue(params),
 		aurora.Blue(dir))
-	cmd := exec.Command(command.Command, command.Params...)
+	cmd := exec.Command(binary, params...)
 	cmd.Dir = dir
 	logs, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("Error arose while running command %v, with params %v in directory %v: %v\n%v",
-			aurora.Blue(command.Command), aurora.Blue(command.Params),
+			aurora.Blue(command.Binary()), aurora.Blue(command.Params()),
 			aurora.Blue(dir), aurora.Red(err), aurora.Red(string(logs)))
 		return err
 	}
 	log.Printf("Executed command %v, with params %v in directory %v. Output:\n%v",
-		aurora.Blue(command.Command), aurora.Blue(command.Params),
+		aurora.Blue(binary), aurora.Blue(params),
 		aurora.Blue(dir), aurora.Green(string(logs)))
 	return nil
 }
@@ -67,7 +77,7 @@ func (action Action) RunAction(wg *sync.WaitGroup) {
 		}
 		if abort {
 			log.Printf("Aborting rest of commands due to reach max retries on %v, with params %v in directory %v",
-				aurora.Blue(command.Command), aurora.Blue(command.Params), aurora.Blue(action.Dir))
+				aurora.Blue(command.Binary()), aurora.Blue(command.Params()), aurora.Blue(action.Dir))
 			break
 		}
 	}
